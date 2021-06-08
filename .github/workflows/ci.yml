@@ -40,7 +40,7 @@ jobs:
 
     - name: Install Tools
       if: steps.pip-cache.outputs.cache-hit != 'true'
-      run: pip install coveralls poetry nox
+      run: pip install coveralls coverage[toml] poetry nox
 
     - name: Cache Nox Environments
       uses: actions/cache@v2

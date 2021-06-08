@@ -43,11 +43,11 @@ def flake8(session):
     if os.getenv("GITHUB_ACTIONS"):
         session.run(
             "flake8",
-            "-v",
+            "stlt",
             "--format=::error file=%(path)s,line=%(row)d,col=%(col)d::[flake8] %(code)s: %(text)s",
         )
     else:
-        session.run("flake8")
+        session.run("flake8", "stlt")
 
 
 @nox.session

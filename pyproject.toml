@@ -12,6 +12,7 @@ packages = [
 python = "^3.9"
 attrs = "^21.2.0"
 click = "^8.0.1"
+rich = "^10.2.2"
 spotipy = "^2.18.0"
 toml = "^0.10.2"
 

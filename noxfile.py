@@ -43,6 +43,7 @@ def flake8(session):
     if os.getenv("GITHUB_ACTIONS"):
         session.run(
             "flake8",
+            "-v",
             "--format=::error file=%(path)s,line=%(row)d,col=%(col)d::[flake8] %(code)s: %(text)s",
         )
     else:

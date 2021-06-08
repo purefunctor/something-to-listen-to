@@ -1,0 +1,63 @@
+name: Lint and Test
+
+on:
+  push:
+
+  pull_request:
+    branches: [ main ]
+
+  workflow_dispatch:
+
+jobs:
+  lint_test:
+    name: Lint and Test
+    runs-on: ubuntu-latest
+    env:
+      PIP_NO_CACHE_DIR: false
+      PIP_USER: 1
+      PYTHONUSERBASE: ${{ github.workspace }}/.cache/py-user-base
+      PRE_COMMIT_HOME: ${{ github.workspace }}/.cache/pre-commit-cache
+
+    steps:
+    - name: Add PYTHONUSERBASE to PATH
+      run: echo '${{ env.PYTHONUSERBASE }}/bin/' >> $GITHUB_PATH
+
+    - name: Checkout Repository
+      uses: actions/checkout@v2
+
+    - name: Install Python
+      uses: actions/setup-python@v2.2.2
+      with:
+        python-version: 3.9
+        architecture: x64
+
+    - name: Cache Pip Folder
+      uses: actions/cache@v2
+      id: pip-cache
+      with:
+        path: ${{ env.PYTHONUSERBASE }}
+        key: pip-${{ runner.os }}-${{ hashFiles('pyproject.toml', 'poetry.lock') }}
+
+    - name: Install Tools
+      if: steps.pip-cache.outputs.cache-hit != 'true'
+      run: pip install coveralls poetry nox
+
+    - name: Cache Nox Environments
+      uses: actions/cache@v2
+      id: nox-cache
+      with:
+        path: .nox
+        key: nox-${{ runner.os }}-${{ hashFiles('pyproject.toml', 'poetry.lock') }}
+
+    - name: Run Nox (Uncached)
+      if: steps.nox-cache.outputs.cache-hit != 'true'
+      run: PIP_USER=0 nox
+
+    - name: Run Nox (Cached)
+      if: steps.nox-cache.outputs.cache-hit == 'true'
+      run: PIP_USER=0 nox -R
+
+    - name: Upload to Coveralls
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      run: coveralls

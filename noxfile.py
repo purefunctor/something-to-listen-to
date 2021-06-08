@@ -26,7 +26,7 @@ def pre_commit(session):
     env = {"SKIP": "flake8"}
 
     install_with_constraints(session, "pre-commit")
-    session.run("pre-commit", "install")
+    session.run_always("pre-commit", "install")
     session.run("pre-commit", "run", "--all-files", env=env)
 
 

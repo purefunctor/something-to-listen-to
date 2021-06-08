@@ -49,6 +49,12 @@ jobs:
         path: .nox
         key: nox-${{ runner.os }}-${{ hashFiles('pyproject.toml', 'poetry.lock') }}
 
+    - name: Cache Pre-Commit Environments
+      uses: actions/cache@v2
+      with:
+        path: ${{ env.PRE_COMMIT_HOME }}
+        key: pre-commit-${{ runner.os }}-${{ hashFiles('.pre-commit-config.yaml') }}
+
     - name: Run Nox (Uncached)
       if: steps.nox-cache.outputs.cache-hit != 'true'
       run: PIP_USER=0 nox

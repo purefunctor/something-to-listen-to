@@ -5,3 +5,4 @@ max-doc-length=72
 ignore = ANN101,ANN102
 import-order-style = google
 appication-import-names = stlt
+docstring-convention = numpy

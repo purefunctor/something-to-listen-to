@@ -1,0 +1,43 @@
+[tool.poetry]
+name = "something-to-listen-to"
+version = "0.1.0"
+description = "A command-line tool for getting songs to listen to in Spotify."
+authors = ["PureFunctor"]
+license = "BSD-3-Clause"
+packages = [
+    { include = "stlt" }
+]
+
+[tool.poetry.dependencies]
+python = "^3.9"
+attrs = "^21.2.0"
+click = "^8.0.1"
+spotipy = "^2.18.0"
+toml = "^0.10.2"
+
+[tool.poetry.dev-dependencies]
+black = "^21.5b2"
+coverage = {extras = ["toml"], version = "^5.5"}
+coveralls = "^3.1.0"
+flake8 = "^3.9.2"
+flake8-annotations = "^2.6.2"
+flake8-docstrings = "^1.6.0"
+flake8-import-order = "^0.18.1"
+mypy = "^0.812"
+pre-commit = "^2.13.0"
+pytest = "^6.2.4"
+taskipy = "^1.8.1"
+
+[tool.coverage.run]
+source = ["stlt"]
+omit = ["*tests*", "stlt/__main__.py"]
+
+[tool.taskipy.tasks]
+format = "black stlt"
+lint = "pre-commit run --all-files"
+test = "coverage run --branch -m pytest && coverage report && coverage html"
+pre-commit = "pre-commit install"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"

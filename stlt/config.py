@@ -67,7 +67,9 @@ class Config:
 def ensure_config(config: Path) -> None:
     """Ensure that the `config` file exists and is valid."""
     config.parent.mkdir(parents=True, exist_ok=True)
-    config.touch(exist_ok=True)
+
+    if config.exists():
+        return None
 
     with config.open("w") as f:
         toml.dump(EMPTY_CONFIG_FILE, f)

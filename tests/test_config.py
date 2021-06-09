@@ -35,6 +35,19 @@ class TestEnsureConfig:
 
         assert path.parent.exists()
 
+    def test_does_not_override_existing_configuration(self, path: Path) -> None:
+        """Test whether existing configuration is preserved."""
+        config = EMPTY_CONFIG_FILE.copy()
+        config["oauth"]["scope"] = "user-library-read"
+        path.parent.mkdir(parents=True, exist_ok=True)
+        with path.open("w") as f:
+            toml.dump(config, f)
+
+        ensure_config(path)
+
+        with path.open("r") as f:
+            assert toml.load(f) == config
+
 
 class TestLoadConfig:
     """Tests for the `load_config` function."""

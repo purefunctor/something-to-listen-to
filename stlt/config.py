@@ -38,12 +38,36 @@ class OAuthConfig:
         return cls(**fields)
 
 
+@attr.s
+class CacheConfig:
+    """Configuration data class for the cache."""
+
+    auth_cache: Path = attr.ib(converter=Path)
+
+    @classmethod
+    def from_dict(cls, data: t.Mapping) -> CacheConfig:
+        """Create a `CacheConfig` from a `toml`-based mapping."""
+        fields = {}
+        for field in attr.fields(cls):
+            name = field.name
+            try:
+                fields[name] = data[name]
+            except KeyError:
+                err = f"Missing required key '{name}'"
+                raise ConfigError(err) from None
+        return cls(**fields)
+
+
 @attr.s(slots=True)
 class Config:
     """Configuration data class for the project."""
 
     oauth: OAuthConfig = attr.ib(
         metadata={"section": ["oauth"], "builder": OAuthConfig.from_dict}
+    )
+
+    cache: CacheConfig = attr.ib(
+        metadata={"section": ["cache"], "builder": CacheConfig.from_dict}
     )
 
     @classmethod

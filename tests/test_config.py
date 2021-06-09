@@ -5,6 +5,7 @@ import pytest
 import toml
 
 from stlt.config import (
+    CacheConfig,
     Config,
     DEFAULT_CONFIG_FILE,
     ensure_config,
@@ -72,12 +73,30 @@ class TestOAuthConfig:
             OAuthConfig.from_dict({})
 
 
+class TestCacheConfig:
+    """Test for the `CacheConfig` class."""
+
+    def test_from_dict_parses_a_valid_mapping(self, path: Path) -> None:
+        """Test valid serialization with `CacheConfig.from_dict`."""
+        expected = CacheConfig(**DEFAULT_CONFIG_FILE["cache"])
+
+        assert CacheConfig.from_dict(DEFAULT_CONFIG_FILE["cache"]) == expected
+
+    def test_from_dict_fails_on_missing_keys(self, path: Path) -> None:
+        """Test invalid serialization with `CacheConfig.from_dict`."""
+        with pytest.raises(ConfigError, match="Missing required key"):
+            CacheConfig.from_dict({})
+
+
 class TestConfig:
     """Tests for the `Config` class."""
 
     def test_from_dict_parses_a_valid_mapping(self, path: Path) -> None:
         """Test valid serialization with `Config.from_dict`."""
-        expected = Config(oauth=OAuthConfig.from_dict(DEFAULT_CONFIG_FILE["oauth"]))
+        expected = Config(
+            oauth=OAuthConfig(**DEFAULT_CONFIG_FILE["oauth"]),
+            cache=CacheConfig(**DEFAULT_CONFIG_FILE["cache"]),
+        )
 
         assert Config.from_dict(DEFAULT_CONFIG_FILE) == expected
 

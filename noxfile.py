@@ -44,10 +44,11 @@ def flake8(session):
         session.run(
             "flake8",
             "stlt",
+            "tests",
             "--format=::error file=%(path)s,line=%(row)d,col=%(col)d::[flake8] %(code)s: %(text)s",
         )
     else:
-        session.run("flake8", "stlt")
+        session.run("flake8", "stlt", "tests")
 
 
 @nox.session

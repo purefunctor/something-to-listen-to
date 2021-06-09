@@ -12,7 +12,7 @@ from stlt import assets
 from stlt.errors import ConfigError
 
 
-EMPTY_CONFIG_FILE = toml.loads(resources.read_text(assets, "config.toml"))
+DEFAULT_CONFIG_FILE = toml.loads(resources.read_text(assets, "config.toml"))
 
 
 @attr.s(slots=True)
@@ -71,7 +71,7 @@ def ensure_config(config: Path) -> None:
         return None
 
     with config.open("w") as f:
-        toml.dump(EMPTY_CONFIG_FILE, f)
+        toml.dump(DEFAULT_CONFIG_FILE, f)
 
 
 def load_config(config: Path) -> t.Mapping:

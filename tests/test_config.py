@@ -6,7 +6,7 @@ import toml
 
 from stlt.config import (
     Config,
-    EMPTY_CONFIG_FILE,
+    DEFAULT_CONFIG_FILE,
     ensure_config,
     load_config,
     OAuthConfig,
@@ -27,7 +27,7 @@ class TestEnsureConfig:
         """Test if a placeholder is created."""
         ensure_config(path)
 
-        assert toml.load(path) == EMPTY_CONFIG_FILE
+        assert toml.load(path) == DEFAULT_CONFIG_FILE
 
     def test_creates_parent_folders(self, path: Path) -> None:
         """Test if parent directories are created."""
@@ -37,7 +37,7 @@ class TestEnsureConfig:
 
     def test_does_not_override_existing_configuration(self, path: Path) -> None:
         """Test if existing configuration files are preserved."""
-        config = EMPTY_CONFIG_FILE.copy()
+        config = DEFAULT_CONFIG_FILE.copy()
         config["oauth"]["scope"] = "user-library-read"
         path.parent.mkdir(parents=True, exist_ok=True)
         with path.open("w") as f:
@@ -54,7 +54,7 @@ class TestLoadConfig:
 
     def test_loads_a_placeholder_configuration_file(self, path: Path) -> None:
         """Test if a placeholder file is returned."""
-        assert load_config(path) == EMPTY_CONFIG_FILE
+        assert load_config(path) == DEFAULT_CONFIG_FILE
 
 
 class TestOAuthConfig:
@@ -62,9 +62,9 @@ class TestOAuthConfig:
 
     def test_from_dict_parses_a_valid_mapping(self, path: Path) -> None:
         """Test valid serialization with `OAuthConfig.from_dict`."""
-        expected = OAuthConfig(**EMPTY_CONFIG_FILE["oauth"])
+        expected = OAuthConfig(**DEFAULT_CONFIG_FILE["oauth"])
 
-        assert OAuthConfig.from_dict(EMPTY_CONFIG_FILE["oauth"]) == expected
+        assert OAuthConfig.from_dict(DEFAULT_CONFIG_FILE["oauth"]) == expected
 
     def test_from_dict_fails_on_missing_keys(self, path: Path) -> None:
         """Test invalid serialization with `OAuthConfig.from_dict`."""
@@ -77,9 +77,9 @@ class TestConfig:
 
     def test_from_dict_parses_a_valid_mapping(self, path: Path) -> None:
         """Test valid serialization with `Config.from_dict`."""
-        expected = Config(oauth=OAuthConfig.from_dict(EMPTY_CONFIG_FILE["oauth"]))
+        expected = Config(oauth=OAuthConfig.from_dict(DEFAULT_CONFIG_FILE["oauth"]))
 
-        assert Config.from_dict(EMPTY_CONFIG_FILE) == expected
+        assert Config.from_dict(DEFAULT_CONFIG_FILE) == expected
 
     def test_from_dict_fails_on_missing_sections(self, path: Path) -> None:
         """Test invalid serialization with `Config.from_dict`."""

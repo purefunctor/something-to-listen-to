@@ -1,23 +1,18 @@
 """Reading and writing user configuration and secrets."""
 from __future__ import annotations
 
+from importlib import resources
 from pathlib import Path
 import typing as t
 
 import attr
 import toml
 
+from stlt import assets
 from stlt.errors import ConfigError
 
 
-EMPTY_CONFIG_FILE = {
-    "oauth": {
-        "client_id": "CLIENT_ID",
-        "client_secret": "CLIENT_SECRET",
-        "redirect_uri": "REDIRECT_URI",
-        "scope": "SCOPE",
-    }
-}
+EMPTY_CONFIG_FILE = toml.loads(resources.read_text(assets, "config.toml"))
 
 
 @attr.s(slots=True)

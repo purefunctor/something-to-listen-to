@@ -22,10 +22,10 @@ install `pre-commit` hooks when developing the project:
 $ poetry run task pre-commit
 ```
 
-Test your changes; the `cov` task allows you to run tests and generate coverage data that you can
+Test your changes; the `test` task allows you to run tests and generate coverage data that you can
 view:
 ```sh
-$ poetry run task cov
+$ poetry run task test
 ```
 
 Lint and format your code; the `lint` task reports any linting errors through `flake8` while the

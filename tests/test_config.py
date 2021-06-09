@@ -24,19 +24,19 @@ class TestEnsureConfig:
     """Tests for the `ensure_config` function."""
 
     def test_creates_a_placeholder_configuration_file(self, path: Path) -> None:
-        """Test whether `ensure_config` creates a placeholder file."""
+        """Test if a placeholder is created."""
         ensure_config(path)
 
         assert toml.load(path) == EMPTY_CONFIG_FILE
 
     def test_creates_parent_folders(self, path: Path) -> None:
-        """Test whether `ensure_config` creates parent directories."""
+        """Test if parent directories are created."""
         ensure_config(path)
 
         assert path.parent.exists()
 
     def test_does_not_override_existing_configuration(self, path: Path) -> None:
-        """Test whether existing configuration is preserved."""
+        """Test if existing configuration files are preserved."""
         config = EMPTY_CONFIG_FILE.copy()
         config["oauth"]["scope"] = "user-library-read"
         path.parent.mkdir(parents=True, exist_ok=True)
@@ -53,7 +53,7 @@ class TestLoadConfig:
     """Tests for the `load_config` function."""
 
     def test_loads_a_placeholder_configuration_file(self, path: Path) -> None:
-        """Test whether `load_config` returns a placeholder file."""
+        """Test if a placeholder file is returned."""
         assert load_config(path) == EMPTY_CONFIG_FILE
 
 

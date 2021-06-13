@@ -4,8 +4,12 @@ repos:
     hooks:
       - id: trailing-whitespace
       - id: mixed-line-ending
-  - repo: https://gitlab.com/pycqa/flake8
-    rev: 3.9.2
+  - repo: local
     hooks:
       - id: flake8
-        exclude: tests
+        name: Flake8
+        description: Runs flake8 including extensions
+        entry: poetry run flake8
+        language: system
+        types: [python]
+        require_serial: true

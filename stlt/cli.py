@@ -51,20 +51,22 @@ def saved(client: Spotify) -> None:
 
 @saved.command(name="albums")
 @click.option("-l", "--limit", default=20)
+@click.option("-c", "--columns", default=3)
 @pass_spotify
-def saved_albums(client: Spotify, limit: int) -> None:
+def saved_albums(client: Spotify, limit: int, columns: int) -> None:
     """List the user's saved albums."""
     response = client.current_user_saved_albums(limit=limit)
-    print(create_album_view(response["items"]))
+    print(create_album_view(response["items"], columns=columns))
 
 
 @saved.command(name="tracks")
 @click.option("-l", "--limit", default=20)
+@click.option("-c", "--columns", default=3)
 @pass_spotify
-def saved_tracks(client: Spotify, limit: int) -> None:
+def saved_tracks(client: Spotify, limit: int, columns: int) -> None:
     """List the user's saved tracks."""
     response = client.current_user_saved_tracks(limit=limit)
-    print(create_track_view(response["items"]))
+    print(create_track_view(response["items"], columns=columns))
 
 
 @stlt.command(name="login")

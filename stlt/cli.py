@@ -3,12 +3,14 @@
 from pathlib import Path
 
 import click
+from rich import print
 from spotipy import Spotify  # type: ignore
 from spotipy.cache_handler import CacheFileHandler  # type: ignore
 from spotipy.oauth2 import SpotifyOAuth  # type: ignore
 
 from stlt.config import load_config
 from stlt.constants import CONFIG_FILE_PATH
+from stlt.view import create_album_view, create_track_view
 
 
 pass_spotify = click.make_pass_decorator(Spotify)
@@ -52,9 +54,7 @@ def saved(client: Spotify) -> None:
 def saved_albums(client: Spotify, limit: int) -> None:
     """List the user's saved albums."""
     response = client.current_user_saved_albums(limit=limit)
-    for item in response["items"]:
-        album = item["album"]
-        print(album["name"], "-", album["label"], "-", album["artists"][0]["name"])
+    print(create_album_view(response["items"]))
 
 
 @saved.command(name="tracks")
@@ -63,9 +63,7 @@ def saved_albums(client: Spotify, limit: int) -> None:
 def saved_tracks(client: Spotify, limit: int) -> None:
     """List the user's saved tracks."""
     response = client.current_user_saved_tracks(limit=limit)
-    for item in response["items"]:
-        track = item["track"]
-        print(track["name"], "-", track["artists"][0]["name"])
+    print(create_track_view(response["items"]))
 
 
 @stlt.command(name="login")

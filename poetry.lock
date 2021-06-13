@@ -182,6 +182,17 @@ python-versions = "*"
 pycodestyle = "*"
 
 [[package]]
+name = "humanize"
+version = "3.7.1"
+description = "Python humanize utilities"
+category = "main"
+optional = false
+python-versions = ">=3.6"
+
+[package.extras]
+tests = ["freezegun", "pytest", "pytest-cov"]
+
+[[package]]
 name = "identify"
 version = "2.2.10"
 description = "File identification library for Python"
@@ -543,7 +554,7 @@ testing = ["coverage (>=4)", "coverage-enable-subprocess (>=1)", "flaky (>=3)", 
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.9"
-content-hash = "959389c65270a6434a9c991bf144fa375c58da4ebe72b7891dd256400d8cf421"
+content-hash = "2120f2f83255cf68f3867e02d268426222ae6932e1155a7f841c479669ca4930"
 
 [metadata.files]
 appdirs = [
@@ -663,6 +674,10 @@ flake8-docstrings = [
 flake8-import-order = [
     {file = "flake8-import-order-0.18.1.tar.gz", hash = "sha256:a28dc39545ea4606c1ac3c24e9d05c849c6e5444a50fb7e9cdd430fc94de6e92"},
     {file = "flake8_import_order-0.18.1-py2.py3-none-any.whl", hash = "sha256:90a80e46886259b9c396b578d75c749801a41ee969a235e163cfe1be7afd2543"},
+]
+humanize = [
+    {file = "humanize-3.7.1-py3-none-any.whl", hash = "sha256:a0dca9eb010dd1fab61819acaea54be344a4c22c77261f72ac4dbee183dd9a59"},
+    {file = "humanize-3.7.1.tar.gz", hash = "sha256:b8e7878f3063174b212bb82b9e5bee3b24bc47931e44df0bd34bcb1d8e0acf2f"},
 ]
 identify = [
     {file = "identify-2.2.10-py2.py3-none-any.whl", hash = "sha256:18d0c531ee3dbc112fa6181f34faa179de3f57ea57ae2899754f16a7e0ff6421"},

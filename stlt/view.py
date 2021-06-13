@@ -4,16 +4,15 @@ from datetime import timedelta
 from shutil import get_terminal_size
 import typing as t
 
-from humanize import precisedelta
+from humanize import precisedelta  # type: ignore
 from rich import box
-from rich.abc import RichRenderable
 from rich.align import Align
 from rich.columns import Columns
 from rich.table import Table
 from rich.text import Text
 
 
-def create_track_view(items: list[t.Mapping], *, columns: int = 3) -> RichRenderable:
+def create_track_view(items: list[t.Mapping], *, columns: int = 3) -> Align:
     """Create a renderable view for tracks."""
     term_cols, _ = get_terminal_size()
 
@@ -63,7 +62,7 @@ def create_track_view(items: list[t.Mapping], *, columns: int = 3) -> RichRender
     return Align(Columns(views, width=column_width), align="center")
 
 
-def create_album_view(items: list[t.Mapping], *, columns: int = 3) -> RichRenderable:
+def create_album_view(items: list[t.Mapping], *, columns: int = 3) -> Align:
     """Create renderable views from albums."""
     term_cols, _ = get_terminal_size()
 

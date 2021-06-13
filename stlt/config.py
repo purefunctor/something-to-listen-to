@@ -93,10 +93,10 @@ def ensure_config(config: Path) -> None:
         toml.dump(DEFAULT_CONFIG_FILE, f)
 
 
-def load_config(config: Path) -> t.Mapping:
-    """Deserialize the `config` file into a `Mapping`."""
+def load_config(config: Path) -> Config:
+    """Deserialize the `config` file into a `Config`."""
     ensure_config(config)
-    return toml.load(config)
+    return Config.from_dict(toml.load(config))
 
 
 def _nested_get(mapping: t.Mapping[str, t.Any], keys: list[str]) -> t.Any:

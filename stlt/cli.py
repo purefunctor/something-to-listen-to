@@ -2,6 +2,7 @@
 
 from pathlib import Path
 
+import attr
 import click
 from rich import print
 from spotipy import Spotify  # type: ignore
@@ -36,8 +37,8 @@ def stlt(context: click.Context, config_file: Path) -> None:  # noqa: D103
     config = load_config(config_file)
     context.obj = Spotify(
         auth_manager=SpotifyOAuth(
-            **config["oauth"],
-            cache_handler=CacheFileHandler(config["cache"]["auth_cache"]),
+            **attr.asdict(config.oauth),
+            cache_handler=CacheFileHandler(config.cache.auth_cache),
         )
     )
 

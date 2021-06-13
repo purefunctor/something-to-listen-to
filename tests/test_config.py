@@ -55,7 +55,7 @@ class TestLoadConfig:
 
     def test_loads_a_placeholder_configuration_file(self, path: Path) -> None:
         """Test if a placeholder file is returned."""
-        assert load_config(path) == DEFAULT_CONFIG_FILE
+        assert load_config(path) == Config.from_dict(DEFAULT_CONFIG_FILE)
 
 
 class TestOAuthConfig:

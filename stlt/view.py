@@ -1,6 +1,7 @@
 """Rich terminal frontend using `rich`."""
 
 from datetime import timedelta
+from shutil import get_terminal_size
 import typing as t
 
 from humanize import precisedelta
@@ -12,14 +13,19 @@ from rich.table import Table
 from rich.text import Text
 
 
-def create_track_view(items: list[t.Mapping]) -> RichRenderable:
+def create_track_view(items: list[t.Mapping], *, columns: int = 3) -> RichRenderable:
     """Create a renderable view for tracks."""
+    term_cols, _ = get_terminal_size()
+
+    column_width = term_cols // columns - 1
+    truncate_width = column_width - 10
+
     views = []
     for index, item in enumerate(items):
         track = item["track"]
 
         _name = Text(track["name"])
-        _name.truncate(25, overflow="ellipsis")
+        _name.truncate(truncate_width, overflow="ellipsis")
         name = Columns(
             [
                 Text(f"{index}."),
@@ -31,7 +37,7 @@ def create_track_view(items: list[t.Mapping]) -> RichRenderable:
         artists = Text("Artists:", style="bold").append_text(
             Text(f" {_artists}", style="not bold")
         )
-        artists.truncate(25, overflow="ellipsis")
+        artists.truncate(truncate_width, overflow="ellipsis")
 
         _duration = precisedelta(
             timedelta(milliseconds=track["duration_ms"]),
@@ -43,7 +49,7 @@ def create_track_view(items: list[t.Mapping]) -> RichRenderable:
         album = Text("Album:", style="bold").append_text(
             Text(f" {_album}", style="not bold")
         )
-        album.truncate(25, overflow="ellipsis")
+        album.truncate(truncate_width, overflow="ellipsis")
 
         view = Table(expand=True, box=box.SQUARE)
 
@@ -54,33 +60,35 @@ def create_track_view(items: list[t.Mapping]) -> RichRenderable:
 
         views.append(view)
 
-    return Align(Columns(views, width=35), align="center")
+    return Align(Columns(views, width=column_width), align="center")
 
 
-def create_album_view(items: list[t.Mapping]) -> RichRenderable:
+def create_album_view(items: list[t.Mapping], *, columns: int = 3) -> RichRenderable:
     """Create renderable views from albums."""
+    term_cols, _ = get_terminal_size()
+
+    column_width = term_cols // columns - 1
+    truncate_width = column_width - 10
+
     views = []
     for index, item in enumerate(items):
         album = item["album"]
 
         _name = Text(album["name"])
-        _name.truncate(25, overflow="ellipsis")
-        name = Columns([
-            Text(f"{index}."),
-            _name
-        ])
+        _name.truncate(truncate_width, overflow="ellipsis")
+        name = Columns([Text(f"{index}."), _name])
 
         _label = album["label"]
         label = Text("Label:", style="bold").append_text(
             Text(f" {_label}", style="not bold")
         )
-        label.truncate(25, overflow="ellipsis")
+        label.truncate(truncate_width, overflow="ellipsis")
 
         _artists = ", ".join(artist["name"] for artist in album["artists"])
         artists = Text("Artists:", style="bold").append_text(
             Text(f" {_artists}", style="not bold")
         )
-        artists.truncate(25, overflow="ellipsis")
+        artists.truncate(truncate_width, overflow="ellipsis")
 
         view = Table(expand=True, box=box.SQUARE)
 
@@ -90,4 +98,4 @@ def create_album_view(items: list[t.Mapping]) -> RichRenderable:
 
         views.append(view)
 
-    return Align(Columns(views, width=35), align="center")
+    return Align(Columns(views, width=column_width), align="center")

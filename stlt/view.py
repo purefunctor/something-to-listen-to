@@ -96,11 +96,23 @@ def create_album_view(items: list[t.Mapping], *, columns: int = 3) -> Align:
         )
         artists.truncate(truncate_width, overflow="ellipsis")
 
+        _tracks = len(album["tracks"]["items"])
+        tracks = Text.from_markup(
+            f"[blue bold]Tracks:[/blue bold] [white]{_tracks}[/white]"
+        )
+
+        _release_date = album["release_date"]
+        release_date = Text.from_markup(
+            f"[blue bold]Release:[/blue bold] [white]{_release_date}[/white]"
+        )
+
         view = Table(expand=True, box=box.SIMPLE_HEAD, style="green")
 
         view.add_column(name)
         view.add_row(label)
         view.add_row(artists)
+        view.add_row(tracks)
+        view.add_row(release_date)
 
         views.append(view)
 

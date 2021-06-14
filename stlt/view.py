@@ -23,18 +23,18 @@ def create_track_view(items: list[t.Mapping], *, columns: int = 3) -> Align:
     for index, item in enumerate(items):
         track = item["track"]
 
-        _name = Text(track["name"], style="white")
+        _name = Text.from_markup(f"[white not bold]{track['name']}[/white not bold]")
         _name.truncate(truncate_width, overflow="ellipsis")
         name = Columns(
             [
-                Text(f"{index}.", style="blue"),
+                f"[blue]{index}.[/blue]",
                 _name,
             ]
         )
 
         _artists = ", ".join(artist["name"] for artist in track["artists"])
-        artists = Text("Artists:", style="blue bold").append_text(
-            Text(f" {_artists}", style="white not bold")
+        artists = Text.from_markup(
+            f"[blue bold]Artists:[/blue bold] [white]{_artists}[/white]"
         )
         artists.truncate(truncate_width, overflow="ellipsis")
 
@@ -42,11 +42,13 @@ def create_track_view(items: list[t.Mapping], *, columns: int = 3) -> Align:
             timedelta(milliseconds=track["duration_ms"]),
             format="%0.0f",
         )
-        duration = f"[bold blue]Duration:[/bold blue] [white]{_duration}[/white]"
+        duration = Text.from_markup(
+            f"[bold blue]Duration:[/bold blue] [white]{_duration}[/white]"
+        )
 
         _album = track["album"]["name"]
-        album = Text("Album:", style="blue bold").append_text(
-            Text(f" {_album}", style="white not bold")
+        album = Text.from_markup(
+            f"[blue bold]Album:[/blue bold] [white]{_album}[/white]"
         )
         album.truncate(truncate_width, overflow="ellipsis")
 
@@ -73,19 +75,24 @@ def create_album_view(items: list[t.Mapping], *, columns: int = 3) -> Align:
     for index, item in enumerate(items):
         album = item["album"]
 
-        _name = Text(album["name"], style="white")
+        _name = Text.from_markup(f"[white not bold]{album['name']}[/white not bold]")
         _name.truncate(truncate_width, overflow="ellipsis")
-        name = Columns([Text(f"{index}.", style="blue"), _name])
+        name = Columns(
+            [
+                f"[blue]{index}.[/blue]",
+                _name,
+            ]
+        )
 
         _label = album["label"]
-        label = Text("Label:", style="blue bold").append_text(
-            Text(f" {_label}", style="white not bold")
+        label = Text.from_markup(
+            f"[blue bold]Label:[/blue bold] [white]{_label}[/white]"
         )
         label.truncate(truncate_width, overflow="ellipsis")
 
         _artists = ", ".join(artist["name"] for artist in album["artists"])
-        artists = Text("Artists:", style="blue bold").append_text(
-            Text(f" {_artists}", style="white not bold")
+        artists = Text.from_markup(
+            f"[blue bold]Artists:[/blue bold] [white]{_artists}[/white]"
         )
         artists.truncate(truncate_width, overflow="ellipsis")
 

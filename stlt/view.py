@@ -23,18 +23,18 @@ def create_track_view(items: list[t.Mapping], *, columns: int = 3) -> Align:
     for index, item in enumerate(items):
         track = item["track"]
 
-        _name = Text(track["name"])
+        _name = Text(track["name"], style="white")
         _name.truncate(truncate_width, overflow="ellipsis")
         name = Columns(
             [
-                Text(f"{index}."),
+                Text(f"{index}.", style="blue"),
                 _name,
             ]
         )
 
         _artists = ", ".join(artist["name"] for artist in track["artists"])
-        artists = Text("Artists:", style="bold").append_text(
-            Text(f" {_artists}", style="not bold")
+        artists = Text("Artists:", style="blue bold").append_text(
+            Text(f" {_artists}", style="white not bold")
         )
         artists.truncate(truncate_width, overflow="ellipsis")
 
@@ -42,15 +42,15 @@ def create_track_view(items: list[t.Mapping], *, columns: int = 3) -> Align:
             timedelta(milliseconds=track["duration_ms"]),
             format="%0.0f",
         )
-        duration = f"[bold]Duration:[/bold] {_duration}"
+        duration = f"[bold blue]Duration:[/bold blue] [white]{_duration}[/white]"
 
         _album = track["album"]["name"]
-        album = Text("Album:", style="bold").append_text(
-            Text(f" {_album}", style="not bold")
+        album = Text("Album:", style="blue bold").append_text(
+            Text(f" {_album}", style="white not bold")
         )
         album.truncate(truncate_width, overflow="ellipsis")
 
-        view = Table(expand=True, box=box.SQUARE)
+        view = Table(expand=True, box=box.SIMPLE_HEAD, style="green")
 
         view.add_column(name)
         view.add_row(artists)
@@ -73,23 +73,23 @@ def create_album_view(items: list[t.Mapping], *, columns: int = 3) -> Align:
     for index, item in enumerate(items):
         album = item["album"]
 
-        _name = Text(album["name"])
+        _name = Text(album["name"], style="white")
         _name.truncate(truncate_width, overflow="ellipsis")
-        name = Columns([Text(f"{index}."), _name])
+        name = Columns([Text(f"{index}.", style="blue"), _name])
 
         _label = album["label"]
-        label = Text("Label:", style="bold").append_text(
-            Text(f" {_label}", style="not bold")
+        label = Text("Label:", style="blue bold").append_text(
+            Text(f" {_label}", style="white not bold")
         )
         label.truncate(truncate_width, overflow="ellipsis")
 
         _artists = ", ".join(artist["name"] for artist in album["artists"])
-        artists = Text("Artists:", style="bold").append_text(
-            Text(f" {_artists}", style="not bold")
+        artists = Text("Artists:", style="blue bold").append_text(
+            Text(f" {_artists}", style="white not bold")
         )
         artists.truncate(truncate_width, overflow="ellipsis")
 
-        view = Table(expand=True, box=box.SQUARE)
+        view = Table(expand=True, box=box.SIMPLE_HEAD, style="green")
 
         view.add_column(name)
         view.add_row(label)

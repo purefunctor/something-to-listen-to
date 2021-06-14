@@ -12,6 +12,13 @@ from rich.table import Table
 from rich.text import Text
 
 
+def create_text(lhs: str, rhs: str, lhs_style: str, rhs_style: str) -> Text:
+    """Create text to be used for views."""
+    return Text.from_markup(
+        f"[{lhs_style}]{lhs}[/{lhs_style}] [{rhs_style}]{rhs}[/{rhs_style}]"
+    )
+
+
 def create_track_view(items: list[t.Mapping], *, columns: int = 3) -> Align:
     """Create a renderable view for tracks."""
     term_cols, _ = get_terminal_size()
@@ -23,33 +30,22 @@ def create_track_view(items: list[t.Mapping], *, columns: int = 3) -> Align:
     for index, item in enumerate(items):
         track = item["track"]
 
-        _name = Text.from_markup(f"[white not bold]{track['name']}[/white not bold]")
-        _name.truncate(truncate_width, overflow="ellipsis")
-        name = Columns(
-            [
-                f"[blue]{index}.[/blue]",
-                _name,
-            ]
-        )
+        _name = track["name"]
+        name = create_text(f"{index}.", _name, "blue", "white not bold")
+        name.truncate(truncate_width, overflow="ellipsis")
 
         _artists = ", ".join(artist["name"] for artist in track["artists"])
-        artists = Text.from_markup(
-            f"[blue bold]Artists:[/blue bold] [white]{_artists}[/white]"
-        )
+        artists = create_text("Artists:", _artists, "blue bold", "white")
         artists.truncate(truncate_width, overflow="ellipsis")
 
         _duration = precisedelta(
             timedelta(milliseconds=track["duration_ms"]),
             format="%0.0f",
         )
-        duration = Text.from_markup(
-            f"[bold blue]Duration:[/bold blue] [white]{_duration}[/white]"
-        )
+        duration = create_text("Duration:", _duration, "blue bold", "white")
 
         _album = track["album"]["name"]
-        album = Text.from_markup(
-            f"[blue bold]Album:[/blue bold] [white]{_album}[/white]"
-        )
+        album = create_text("Album:", _album, "blue bold", "white")
         album.truncate(truncate_width, overflow="ellipsis")
 
         view = Table(expand=True, box=box.SIMPLE_HEAD, style="green")
@@ -75,36 +71,25 @@ def create_album_view(items: list[t.Mapping], *, columns: int = 3) -> Align:
     for index, item in enumerate(items):
         album = item["album"]
 
-        _name = Text.from_markup(f"[white not bold]{album['name']}[/white not bold]")
-        _name.truncate(truncate_width, overflow="ellipsis")
-        name = Columns(
-            [
-                f"[blue]{index}.[/blue]",
-                _name,
-            ]
-        )
+        _name = album["name"]
+        name = create_text(f"{index}.", _name, "blue", "white not bold")
+        name.truncate(truncate_width, overflow="ellipsis")
 
         _label = album["label"]
-        label = Text.from_markup(
-            f"[blue bold]Label:[/blue bold] [white]{_label}[/white]"
-        )
+        label = create_text("Label:", _label, "blue bold", "white")
         label.truncate(truncate_width, overflow="ellipsis")
 
         _artists = ", ".join(artist["name"] for artist in album["artists"])
-        artists = Text.from_markup(
-            f"[blue bold]Artists:[/blue bold] [white]{_artists}[/white]"
-        )
+        artists = create_text("Artists:", _artists, "blue bold", "white")
         artists.truncate(truncate_width, overflow="ellipsis")
 
         _tracks = len(album["tracks"]["items"])
-        tracks = Text.from_markup(
-            f"[blue bold]Tracks:[/blue bold] [white]{_tracks}[/white]"
-        )
+        tracks = create_text("Tracks:", str(_tracks), "blue bold", "white")
+        tracks.truncate(truncate_width, overflow="ellipsis")
 
         _release_date = album["release_date"]
-        release_date = Text.from_markup(
-            f"[blue bold]Release:[/blue bold] [white]{_release_date}[/white]"
-        )
+        release_date = create_text("Release:", _release_date, "blue bold", "white")
+        release_date.truncate(truncate_width, overflow="ellipsis")
 
         view = Table(expand=True, box=box.SIMPLE_HEAD, style="green")
 

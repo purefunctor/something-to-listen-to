@@ -1,5 +1,5 @@
 [flake8]
-exclude = .git,.nox,noxfile.py,__pycache__,tests
+exclude = .git,.nox,noxfile.py,__pycache__
 max-line-length=88
 max-doc-length=72
 ignore = ANN101,ANN102

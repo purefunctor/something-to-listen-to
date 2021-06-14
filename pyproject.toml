@@ -12,6 +12,7 @@ packages = [
 python = "^3.9"
 attrs = "^21.2.0"
 click = "^8.0.1"
+humanize = "^3.7.1"
 rich = "^10.2.2"
 spotipy = "^2.18.0"
 toml = "^0.10.2"
@@ -27,6 +28,10 @@ mypy = "^0.812"
 pre-commit = "^2.13.0"
 pytest = "^6.2.4"
 taskipy = "^1.8.1"
+pytest-mock = "^3.6.1"
+
+[tool.poetry.scripts]
+stlt = "stlt.cli:stlt"
 
 [tool.coverage.run]
 source = ["stlt"]

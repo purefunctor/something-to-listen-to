@@ -28,11 +28,6 @@ pass_spotify = click.make_pass_decorator(Spotify)
 )
 @click.pass_context
 def stlt(context: click.Context, config_file: Path) -> None:  # noqa: D103
-    # Ensure that no side-effects are run
-    # when no subcommand is invoked.
-    if context.invoked_subcommand is None:
-        return None
-
     context.ensure_object(dict)
     config = load_config(config_file)
     context.obj = Spotify(

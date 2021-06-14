@@ -53,7 +53,7 @@ def flake8(session):
 
 @nox.session
 def test(session):
-    install_with_constraints(session, "pytest", "coverage[toml]")
+    install_with_constraints(session, "pytest", "pytest_mock", "coverage[toml]")
     session.install(".")
     session.run("coverage", "run", "--branch", "-m", "pytest", "-vs")
     session.run("coverage", "report", "-m")

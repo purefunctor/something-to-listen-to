@@ -38,7 +38,7 @@ class TestEnsureConfig:
 
     def test_does_not_override_existing_configuration(self, path: Path) -> None:
         """Test if existing configuration files are preserved."""
-        config = DEFAULT_CONFIG_FILE.copy()
+        config = {**DEFAULT_CONFIG_FILE}
         config["oauth"]["scope"] = "user-library-read"
         path.parent.mkdir(parents=True, exist_ok=True)
         with path.open("w") as f:

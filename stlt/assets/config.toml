@@ -6,3 +6,9 @@ scope = "SCOPE"
 
 [cache]
 auth_cache = "CACHE"
+
+[style]
+box_color = "green"
+box_style = "SIMPLE_HEAD"
+lhs_style = "blue bold"
+rhs_style = "white not bold"

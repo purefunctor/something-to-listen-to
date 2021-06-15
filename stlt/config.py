@@ -69,6 +69,16 @@ class CacheConfig(_FromToml):
     auth_cache: Path = attr.ib(converter=Path)
 
 
+@attr.s
+class StyleConfig(_FromToml):
+    """Configuration data class for `rich` styling."""
+
+    box_color: str = attr.ib()
+    box_style: str = attr.ib()
+    lhs_style: str = attr.ib()
+    rhs_style: str = attr.ib()
+
+
 @attr.s(slots=True)
 class Config(_FromToml):
     """Configuration data class for the project."""
@@ -79,6 +89,10 @@ class Config(_FromToml):
 
     cache: CacheConfig = attr.ib(
         metadata={"section": ["cache"], "builder": CacheConfig.from_dict}
+    )
+
+    style: StyleConfig = attr.ib(
+        metadata={"section": ["style"], "builder": StyleConfig.from_dict}
     )
 
 

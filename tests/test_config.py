@@ -11,6 +11,7 @@ from stlt.config import (
     ensure_config,
     load_config,
     OAuthConfig,
+    StyleConfig,
 )
 from stlt.errors import ConfigError
 
@@ -88,6 +89,21 @@ class TestCacheConfig:
             CacheConfig.from_dict({})
 
 
+class TestStyleConfig:
+    """Tests for the `StyleConfig` class."""
+
+    def test_from_dict_parses_a_valid_mapping(self, path: Path) -> None:
+        """Test valid serialization with `StyleConfig.from_dict`."""
+        expected = StyleConfig(**DEFAULT_CONFIG_FILE["style"])
+
+        assert StyleConfig.from_dict(DEFAULT_CONFIG_FILE["style"]) == expected
+
+    def test_from_dict_fails_on_missing_keys(self, path: Path) -> None:
+        """Test invalid serialization with `CacheConfig.from_dict`."""
+        with pytest.raises(ConfigError, match="Missing required key"):
+            StyleConfig.from_dict({})
+
+
 class TestConfig:
     """Tests for the `Config` class."""
 
@@ -96,6 +112,7 @@ class TestConfig:
         expected = Config(
             oauth=OAuthConfig(**DEFAULT_CONFIG_FILE["oauth"]),
             cache=CacheConfig(**DEFAULT_CONFIG_FILE["cache"]),
+            style=StyleConfig(**DEFAULT_CONFIG_FILE["style"]),
         )
 
         assert Config.from_dict(DEFAULT_CONFIG_FILE) == expected

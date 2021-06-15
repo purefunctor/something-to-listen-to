@@ -62,7 +62,7 @@ def saved(context: Context) -> None:
 def saved_albums(context: Context, limit: int, columns: int) -> None:
     """List the user's saved albums."""
     response = context.client.current_user_saved_albums(limit=limit)
-    print(create_album_view(response["items"], columns=columns))
+    print(create_album_view(response["items"], context.config.style, columns=columns))
 
 
 @saved.command(name="tracks")
@@ -72,7 +72,7 @@ def saved_albums(context: Context, limit: int, columns: int) -> None:
 def saved_tracks(context: Context, limit: int, columns: int) -> None:
     """List the user's saved tracks."""
     response = context.client.current_user_saved_tracks(limit=limit)
-    print(create_track_view(response["items"], columns=columns))
+    print(create_track_view(response["items"], context.config.style, columns=columns))
 
 
 @stlt.command(name="login")

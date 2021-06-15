@@ -80,6 +80,9 @@ class TestSaved:
         client = self.create_client(mocker)
         client.current_user_saved_albums.return_value = mocker.MagicMock(spec=dict)
         mocker.patch("stlt.cli.create_album_view", return_value="debug")
+        mocker.patch(
+            "stlt.cli.load_config", return_value=Config.from_dict(DEFAULT_CONFIG_FILE)
+        )
 
         result = runner.invoke(stlt, ["saved", "albums"])
 
@@ -91,6 +94,9 @@ class TestSaved:
         client = self.create_client(mocker)
         client.current_user_saved_tracks = mocker.MagicMock(spec=dict)
         mocker.patch("stlt.cli.create_track_view", return_value="debug")
+        mocker.patch(
+            "stlt.cli.load_config", return_value=Config.from_dict(DEFAULT_CONFIG_FILE)
+        )
 
         result = runner.invoke(stlt, ["saved", "tracks"])
 
@@ -111,6 +117,9 @@ class TestLogin:
     def test_login_fresh(self, mocker: MockerFixture, runner: CliRunner) -> None:
         """Test fresh logins."""
         client = self.create_client(mocker, None)
+        mocker.patch(
+            "stlt.cli.load_config", return_value=Config.from_dict(DEFAULT_CONFIG_FILE)
+        )
 
         result = runner.invoke(stlt, ["login"])
 
@@ -121,6 +130,9 @@ class TestLogin:
     def test_login_cached(self, mocker: MockerFixture, runner: CliRunner) -> None:
         """Test cached logins."""
         self.create_client(mocker, "token")
+        mocker.patch(
+            "stlt.cli.load_config", return_value=Config.from_dict(DEFAULT_CONFIG_FILE)
+        )
 
         result = runner.invoke(stlt, ["login"])
 

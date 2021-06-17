@@ -18,14 +18,18 @@ from stlt.config import StyleConfig
 
 @attr.s
 class _KvBuilder:
+    """Helper class for building `rich` tables."""
+
     style: StyleConfig = attr.ib()
     truncate_width: int = attr.ib()
     _kvs: list[Text] = attr.ib(init=False, factory=list)
 
     def _surround_markup(self, text: str, surround: str) -> str:
+        """Surround some `text` using console markup."""
         return f"[{surround}]{text}[/{surround}]"
 
     def append(self, lhs: str, rhs: str) -> None:
+        """Append `lhs` and `rhs` to the current state."""
         _lhs = self._surround_markup(lhs, self.style.lhs_style)
         _rhs = self._surround_markup(rhs, self.style.rhs_style)
 
@@ -35,6 +39,7 @@ class _KvBuilder:
         self._kvs.append(text)
 
     def create(self) -> Table:
+        """Consume the current state and construct a `Table`."""
         view = Table(
             expand=True,
             box=getattr(box, self.style.box_style),
@@ -51,11 +56,14 @@ class _KvBuilder:
         return view
 
     def reset(self) -> None:
+        """Reset the state."""
         self._kvs = []
 
 
 @attr.s
 class _ViewBuilder:
+    """Helper class for building `rich` views of `Spotify` data."""
+
     style: StyleConfig = attr.ib()
     columns: int = attr.ib()
 
@@ -70,11 +78,13 @@ class _ViewBuilder:
         self._kv_builder = _KvBuilder(self.style, self._column_width - 10)
 
     def append(self, kvs: t.Mapping[str, str]) -> None:
+        """Append data to the current state."""
         for lhs, rhs in kvs.items():
             self._kv_builder.append(lhs, rhs)
         self._views.append(self._kv_builder.create())
 
     def create(self) -> Align:
+        """Consume the current state and create an `Align`."""
         return Align(Columns(self._views, width=self._column_width), align="center")
 
 

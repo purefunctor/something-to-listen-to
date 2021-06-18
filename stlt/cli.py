@@ -21,6 +21,26 @@ class Context:
     client: Spotify = attr.ib()
     config: Config = attr.ib()
 
+    def saved_albums(self, *, limit: int, columns: int) -> None:
+        """List the user's saved albums."""
+        response = self.client.current_user_saved_albums(limit=limit)
+        view = create_album_view(response["items"], self.config.style, columns=columns)
+        print(view)
+
+    def saved_tracks(self, *, limit: int, columns: int) -> None:
+        """List the user's saved tracks."""
+        response = self.client.current_user_saved_tracks(limit=limit)
+        view = create_track_view(response["items"], self.config.style, columns=columns)
+        print(view)
+
+    def login(self) -> None:
+        """Log in using Spotify OAuth."""
+        if self.client.auth_manager.cache_handler.get_cached_token() is not None:
+            print("Logged in!")
+        else:
+            print("Logging you in...")
+            self.client.auth_manager.get_access_token()
+
 
 pass_context = click.make_pass_decorator(Context)
 
@@ -61,8 +81,7 @@ def saved(context: Context) -> None:
 @pass_context
 def saved_albums(context: Context, limit: int, columns: int) -> None:
     """List the user's saved albums."""
-    response = context.client.current_user_saved_albums(limit=limit)
-    print(create_album_view(response["items"], context.config.style, columns=columns))
+    context.saved_albums(limit=limit, columns=columns)
 
 
 @saved.command(name="tracks")
@@ -71,16 +90,11 @@ def saved_albums(context: Context, limit: int, columns: int) -> None:
 @pass_context
 def saved_tracks(context: Context, limit: int, columns: int) -> None:
     """List the user's saved tracks."""
-    response = context.client.current_user_saved_tracks(limit=limit)
-    print(create_track_view(response["items"], context.config.style, columns=columns))
+    context.saved_tracks(limit=limit, columns=columns)
 
 
 @stlt.command(name="login")
 @pass_context
 def login(context: Context) -> None:
     """Log in using Spotify OAuth."""
-    if context.client.auth_manager.cache_handler.get_cached_token() is not None:
-        click.echo("Logged in!")
-    else:
-        click.echo("Logging you in...")
-        context.client.auth_manager.get_access_token()
+    context.login()
